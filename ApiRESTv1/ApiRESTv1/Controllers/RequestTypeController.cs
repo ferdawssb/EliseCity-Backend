@@ -96,8 +96,46 @@ namespace ApiRESTv1.Controllers
 			return Ok(Requests);
 		}
 
+		[HttpDelete]
+		public IActionResult DeleteProduct(int id)
+		{
+
+			try
+			{
+
+				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
+				{
+
+					connection.Open();
+
+					string sql = "DELETE FROM request_type WHERE id=@id";
+
+					using (var command = new MySqlCommand(sql, connection))
+					{
+						command.Parameters.AddWithValue("@id", id);
 
 
+
+						command.ExecuteNonQuery();
+
+					}
+
+
+				}
+
+
+
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("Product", "Sorry, but we have an exception");
+				return BadRequest(ModelState);
+
+
+			}
+			return Ok();
+		}
+		
 
 	}
 }

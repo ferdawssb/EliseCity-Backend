@@ -34,7 +34,7 @@ namespace ApiRESTv1.Controllers
 
 					using (var getUserIdCommand = new MySqlCommand(userIdSql, connection))
 					{
-						getUserIdCommand.Parameters.AddWithValue("@Firstname", req.User); 
+						getUserIdCommand.Parameters.AddWithValue("@Firstname", req.IdUser); 
 						var userIdResult = getUserIdCommand.ExecuteScalar();
 						if (userIdResult != null)
 						{
@@ -54,7 +54,7 @@ namespace ApiRESTv1.Controllers
 
 					using (var getTypeIdCommand = new MySqlCommand(typeIdSql, connection))
 					{
-						getTypeIdCommand.Parameters.AddWithValue("@title", req.RequestType); 
+						getTypeIdCommand.Parameters.AddWithValue("@title", req.IdType); 
 						var typeIdResult = getTypeIdCommand.ExecuteScalar();
 						if (typeIdResult != null)
 						{
@@ -97,10 +97,11 @@ namespace ApiRESTv1.Controllers
 		}
 
 
+
 		[HttpGet()]
 		public IActionResult GetAdmins()
 		{
-			List<Request> Requests = new List<Request>();
+			List<Request> Requests = new List <Request>();
 			try
 			{
 				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
@@ -139,6 +140,47 @@ namespace ApiRESTv1.Controllers
 			}
 			return Ok(Requests);
 		}
+
+		[HttpDelete]
+		public IActionResult DeleteProduct(int id)
+		{
+
+			try
+			{
+
+				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
+				{
+
+					connection.Open();
+
+					string sql = "DELETE FROM request WHERE id=@id";
+
+					using (var command = new MySqlCommand(sql, connection))
+					{
+						command.Parameters.AddWithValue("@id", id);
+
+
+
+						command.ExecuteNonQuery();
+
+					}
+
+
+				}
+
+
+
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("Product", "Sorry, but we have an exception");
+				return BadRequest(ModelState);
+
+
+			}
+			return Ok();
+		}
+
 
 	}
 }

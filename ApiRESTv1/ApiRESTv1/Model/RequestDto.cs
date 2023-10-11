@@ -11,10 +11,10 @@ namespace ApiRESTv1.Model
 		[Required]
 		public string IdType { get; set; } = "";
 		[Required]
-		[Required]
+		
 		public string IdUser { get; set; } = "";
 		[Required]
-		[Required]
+		
 
 		public decimal Longitude { get; set; }
 		[Required]
