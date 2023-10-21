@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using System;
-
 namespace ApiRESTv1.Controllers
 {
 	[Route("api/[controller]")]
@@ -19,9 +18,6 @@ namespace ApiRESTv1.Controllers
 			_context = context;
 			
 		}
-
-
-	
 		[HttpPost]
 		public IActionResult CreateProduct(RequestTypeDto req)
 		{
@@ -48,17 +44,12 @@ namespace ApiRESTv1.Controllers
 			}
 			catch (Exception e)
 			{
-				ModelState.AddModelError("Request", "Désolé, mais nous avons rencontré une exception.");
+				ModelState.AddModelError("TypeRequestPostError", "Désolé, mais nous avons rencontré une exception.");
 				return BadRequest(ModelState);
 			}
 
 			return Ok();
-
 		}
-
-
-
-
 		[HttpGet()]
 		public IActionResult GetAdmins()
 		{
@@ -90,7 +81,7 @@ namespace ApiRESTv1.Controllers
 			}
 			catch (Exception e)
 			{
-				ModelState.AddModelError("Request", "Désolé, mais nous avons rencontré une exception.");
+				ModelState.AddModelError("TypeRequestGetError", "Désolé, mais nous avons rencontré une exception.");
 				return BadRequest(ModelState);
 			}
 			return Ok(Requests);
@@ -102,7 +93,6 @@ namespace ApiRESTv1.Controllers
 
 			try
 			{
-
 				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
 				{
 
@@ -119,16 +109,11 @@ namespace ApiRESTv1.Controllers
 						command.ExecuteNonQuery();
 
 					}
-
-
 				}
-
-
-
 			}
 			catch (Exception ex)
 			{
-				ModelState.AddModelError("Product", "Sorry, but we have an exception");
+				ModelState.AddModelError("TypeRequestDeleteError", "Sorry, but we have an exception");
 				return BadRequest(ModelState);
 
 

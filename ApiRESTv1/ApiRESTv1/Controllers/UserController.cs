@@ -36,16 +36,17 @@ namespace ApiRESTv1.Controllers
 						{
 							while (reader.Read())
 							{
-								User admin = new User();
-
-								admin.Id = reader.GetInt32(0);
-								admin.Firstname = reader.GetString(1);
-								admin.Lastname = reader.GetString(2);
-								admin.Mobile = reader.GetString(3);
-								admin.login = reader.GetString(4);
-								admin.Password = reader.GetString(5);
-								admin.CreateAt = reader.GetDateTime(6);
-								admin.UpdateAt = reader.GetDateTime(7);
+								var admin = new User
+								{
+									Id = reader.GetInt32(0),
+									Firstname = reader.GetString(1),
+									Lastname = reader.GetString(2),
+									Mobile = reader.GetString(3),
+									login = reader.GetString(4),
+									Password = reader.GetString(5),
+									CreateAt = reader.GetDateTime(6),
+									UpdateAt = reader.GetDateTime(7)
+								};
 
 								Users.Add(admin);
 							}
@@ -55,15 +56,55 @@ namespace ApiRESTv1.Controllers
 			}
 			catch (Exception e)
 			{
-				ModelState.AddModelError("Admin", "Désolé, mais nous avons rencontré une exception.");
+				ModelState.AddModelError("UsersGetError", "Désolé, mais nous avons rencontré une exception.");
 				return BadRequest(ModelState);
 			}
 			return Ok(Users);
 		}
 
+		[HttpGet("{id}")]
+		public IActionResult GetOneUser(int id)
+		{
 
+			try
+			{
 
+				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
+				{
+					connection.Open();
 
+					string req = "SELECT * FROM users where id = @id";
+					using (var command = new MySqlCommand(req, connection))
+					{
+						command.Parameters.AddWithValue("@id", id);
+						using (var reader = command.ExecuteReader())
+						{
+							reader.Read();
+							return Ok(new User
+							{
+								Id = reader.GetInt32(0),
+								Firstname = reader.GetString(1),
+								Lastname = reader.GetString(2),
+								Mobile = reader.GetString(3),
+								login = reader.GetString(4),
+								Password = reader.GetString(5),
+								CreateAt = reader.GetDateTime(6),
+								UpdateAt = reader.GetDateTime(7)
+							});
+
+						}
+					}
+				}
+
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError("UserGetError", "Sorry, but we have an exception");
+				return BadRequest(ModelState);
+
+			}
+
+		}
 		[HttpPost]
 		public IActionResult CreateProduct(CompteUserDto CompteAd)
 		{
@@ -72,8 +113,8 @@ namespace ApiRESTv1.Controllers
 				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
 				{
 					connection.Open();
-					String sql = "INSERT INTO users"+
-						"(Firstname,Lastname,Mobile,Login,Password) VALUES "+
+					String sql = "INSERT INTO users" +
+						"(Firstname,Lastname,Mobile,Login,Password) VALUES " +
 						"(@firstname, @lastname, @mobile, @login, @password)";
 
 
@@ -95,7 +136,7 @@ namespace ApiRESTv1.Controllers
 			}
 			catch (Exception e)
 			{
-				ModelState.AddModelError("Admin", "Désolé, mais nous avons rencontré une exception.");
+				ModelState.AddModelError("UserPostError", "Désolé, mais nous avons rencontré une exception.");
 				return BadRequest(ModelState);
 			}
 
@@ -136,7 +177,7 @@ namespace ApiRESTv1.Controllers
 			}
 			catch (Exception ex)
 			{
-				ModelState.AddModelError("Product", "Sorry, but we have an exception");
+				ModelState.AddModelError("UserUpdateError", "Sorry, but we have an exception");
 				return BadRequest(ModelState);
 
 			}
@@ -148,53 +189,33 @@ namespace ApiRESTv1.Controllers
 		[HttpDelete]
 		public IActionResult DeleteProduct(int id)
 		{
-
 			try
 			{
-
 				using (var connection = new MySqlConnection(_context.Database.GetConnectionString()))
 				{
-
 					connection.Open();
-
 					string sql = "DELETE FROM users WHERE Id=@id";
-
 					using (var command = new MySqlCommand(sql, connection))
 					{
 						command.Parameters.AddWithValue("@id", id);
-
-
-
 						command.ExecuteNonQuery();
-
 					}
-
-
 				}
-
-
-
 			}
 			catch (Exception ex)
 			{
-				ModelState.AddModelError("Product", "Sorry, but we have an exception");
+				if (ex.Message.Contains("foreign key"))
+				{
+					ModelState.AddModelError("UserCantBeDeleted", "L'utilisateur que vous voulez supprimer a une demande en cours.");
+				}
+				else
+				{
+					ModelState.AddModelError("UserDeleteError", "Sorry, but we have an exception");
+				}
 				return BadRequest(ModelState);
-
-
 			}
 			return Ok();
 		}
-
-
-
-
 	}
-
-
-
-
-
-
-
 }
 
