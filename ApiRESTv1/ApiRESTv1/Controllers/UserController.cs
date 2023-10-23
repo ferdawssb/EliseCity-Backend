@@ -20,7 +20,7 @@ namespace ApiRESTv1.Controllers
 
 
 		[HttpGet()]
-		public IActionResult GetAdmins()
+		public IActionResult GetUsers()
 		{
 			List<User> Users = new List<User>();
 			try
@@ -106,7 +106,7 @@ namespace ApiRESTv1.Controllers
 
 		}
 		[HttpPost]
-		public IActionResult CreateProduct(CompteUserDto CompteAd)
+		public IActionResult CreateUser(CompteUserDto CompteAd)
 		{
 			try
 			{
@@ -145,7 +145,7 @@ namespace ApiRESTv1.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public IActionResult UpdateCompteAd(int id, CompteUserDto Compte)
+		public IActionResult UpdateUser(int id, CompteUserDto Compte)
 		{
 
 			try
@@ -187,7 +187,7 @@ namespace ApiRESTv1.Controllers
 
 
 		[HttpDelete]
-		public IActionResult DeleteProduct(int id)
+		public IActionResult DeleteUser(int id)
 		{
 			try
 			{

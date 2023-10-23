@@ -19,7 +19,7 @@ namespace ApiRESTv1.Controllers
 			
 		}
 		[HttpPost]
-		public IActionResult CreateProduct(RequestTypeDto req)
+		public IActionResult CreateTypeReq(RequestTypeDto req)
 		{
 			try
 			{
@@ -51,7 +51,7 @@ namespace ApiRESTv1.Controllers
 			return Ok();
 		}
 		[HttpGet()]
-		public IActionResult GetAdmins()
+		public IActionResult GetTypeReqs()
 		{
 			List<RequestType> Requests = new List<RequestType>();
 			try
@@ -88,7 +88,7 @@ namespace ApiRESTv1.Controllers
 		}
 
 		[HttpDelete]
-		public IActionResult DeleteProduct(int id)
+		public IActionResult DeleteTypeReq(int id)
 		{
 
 			try

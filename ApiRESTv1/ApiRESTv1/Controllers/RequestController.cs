@@ -18,10 +18,8 @@ namespace ApiRESTv1.Controllers
 			_context = context;
 
 		}
-
-
 		[HttpPost]
-		public IActionResult CreateProduct(RequestDto req)
+		public IActionResult CreateRequest(RequestDto req)
 		{
 			try
 			{
@@ -55,10 +53,8 @@ namespace ApiRESTv1.Controllers
 			return Ok();
 		}
 
-
-
 		[HttpGet()]
-		public IActionResult GetAdmins()
+		public IActionResult GetRequests()
 		{
 			List<Request> Requests = new List<Request>();
 			try
@@ -101,7 +97,7 @@ namespace ApiRESTv1.Controllers
 		}
 
 		[HttpDelete]
-		public IActionResult DeleteProduct(int id)
+		public IActionResult DeleteRequest(int id)
 		{
 
 			try
@@ -126,8 +122,6 @@ namespace ApiRESTv1.Controllers
 
 
 				}
-
-
 
 			}
 			catch (Exception ex)
